@@ -169,20 +169,10 @@ function animateProcess(): void {
 }
 
 function animateBrand(): void {
-  // Las tres estrellas titilan de forma sutil.
-  gsap.to('[data-estrella]', {
-    opacity: 0.35,
-    duration: 1.6,
-    ease: 'sine.inOut',
-    repeat: -1,
-    yoyo: true,
-    stagger: { each: 0.45, from: 'random' },
-  });
-
-  // Giro muy lento de la corona del girasol en la marca de agua.
-  gsap.to('[data-spin] [data-corona]', {
+  // Giro muy lento del girasol en la marca de agua.
+  gsap.to('[data-spin] [data-isotipo]', {
     rotation: 360,
-    svgOrigin: '70 70',
+    transformOrigin: '50% 50%',
     duration: 180,
     ease: 'none',
     repeat: -1,

@@ -1,35 +1,25 @@
 ---
-// Isotipo de Orión: girasol + las tres estrellas del cinturón (Las Tres Marías).
-// Basado en brand/logo-orion.svg. Requiere <SvgDefs /> en el layout.
+// Isotipo de Orión: girasol con la constelación calada.
+// Redibujado con brand/tools/gen-isotipo.cjs; el SVG vive en public/.
 interface Props {
   class?: string;
   /** Texto alternativo. Si se omite, el isotipo es decorativo. */
   title?: string;
-  /** Usa un núcleo más oscuro para fondos Azul Noche. */
+  /** Se conserva por compatibilidad: el isotipo es dorado en ambos fondos. */
   onDark?: boolean;
 }
 
-const { class: className, title, onDark = false } = Astro.props;
+const { class: className, title } = Astro.props;
 ---
 
-<svg
-  viewBox="0 0 140 140"
-  class={className}
-  role={title ? 'img' : undefined}
-  aria-label={title}
+<img
+  src="/isotipo-orion.svg"
+  alt={title ?? ''}
   aria-hidden={title ? undefined : 'true'}
-  focusable="false"
->
-  <g data-corona>
-    <use href="#orion-corona" class="fill-oro-oscuro" transform="rotate(15 70 70)"></use>
-    <use href="#orion-corona" class="fill-oro"></use>
-  </g>
-  <circle cx="70" cy="70" r="31" class={onDark ? 'fill-noche-profundo' : 'fill-noche'}></circle>
-  <path d="M54 77 L86 63" fill="none" class="stroke-oro" stroke-width="0.9" stroke-linecap="round" opacity="0.85"
-  ></path>
-  <g class="fill-marfil">
-    <use href="#orion-estrella" transform="translate(70 70) scale(1.25)" data-estrella></use>
-    <use href="#orion-estrella" transform="translate(54 77) scale(0.95)" data-estrella></use>
-    <use href="#orion-estrella" transform="translate(86 63) scale(0.95)" data-estrella></use>
-  </g>
-</svg>
+  width="1349"
+  height="1349"
+  decoding="async"
+  loading="lazy"
+  class={className}
+  data-isotipo
+/>

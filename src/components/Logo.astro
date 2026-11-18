@@ -1,5 +1,6 @@
 ---
-import Isotype from './Isotype.astro';
+// Logotipo de Orión (girasol con constelación + nombre caligráfico).
+// Vectorizado desde brand/logo-orion-v2-fuente.png; los SVG viven en public/.
 import { SITE } from '../data/site';
 
 const LOGO_VARIANT = {
@@ -16,30 +17,28 @@ interface Props {
 
 const { variant = LOGO_VARIANT.POSITIVE, showTagline = false } = Astro.props;
 const isNegative = variant === LOGO_VARIANT.NEGATIVE;
+const src = isNegative ? '/logo-orion-negativo.svg' : '/logo-orion.svg';
 ---
 
-<span class="inline-flex items-center gap-3">
-  <Isotype class="h-11 w-11 shrink-0 md:h-12 md:w-12" onDark={isNegative} />
-  <span class="flex flex-col leading-none">
-    <span
-      class:list={[
-        'font-display text-2xl font-semibold tracking-[0.14em] md:text-[1.75rem]',
-        isNegative ? 'text-marfil' : 'text-noche',
-      ]}
-    >
-      ORIÓN
-    </span>
-    {
-      showTagline && (
-        <span
-          class:list={[
-            'mt-1.5 text-[0.625rem] font-medium uppercase tracking-[0.22em]',
-            isNegative ? 'text-oro' : 'text-bronce',
-          ]}
-        >
-          {SITE.tagline}
-        </span>
-      )
-    }
-  </span>
+<span class="inline-flex flex-col items-start">
+  <img
+    src={src}
+    alt={SITE.name}
+    width="3719"
+    height="1343"
+    decoding="async"
+    class:list={['w-auto', showTagline ? 'h-16 md:h-20' : 'h-12 md:h-14']}
+  />
+  {
+    showTagline && (
+      <span
+        class:list={[
+          'mt-3 text-[0.625rem] font-medium uppercase tracking-[0.22em]',
+          isNegative ? 'text-oro' : 'text-bronce',
+        ]}
+      >
+        {SITE.tagline}
+      </span>
+    )
+  }
 </span>
