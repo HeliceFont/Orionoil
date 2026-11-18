@@ -1,0 +1,101 @@
+---
+import { Picture } from 'astro:assets';
+import Arrow from './Arrow.astro';
+import SectionHeading from './SectionHeading.astro';
+import truckImage from '../assets/images/camion-cisterna.jpg';
+import { CERTIFICATIONS, PRODUCT_FORMATS, QUOTE_ANCHOR } from '../data/site';
+
+const hasFormats = PRODUCT_FORMATS.length > 0;
+const hasCertifications = CERTIFICATIONS.length > 0;
+---
+
+<section id="producto" class="bg-arena py-24 md:py-36">
+  <div class="container-content">
+    <div class="grid items-center gap-14 lg:grid-cols-[1.1fr_0.9fr] lg:gap-24">
+      <div>
+        <SectionHeading
+          eyebrow="Producto y formatos"
+          title="Aceite de girasol, nuestra única especialidad"
+          lead="Nos dedicamos exclusivamente al aceite de girasol y lo comercializamos al por mayor para empresas."
+        />
+
+        {
+          !hasFormats && (
+            <div class="mt-12 grid gap-5" data-reveal-group>
+              <div class="card p-8 md:p-9">
+                <h3 class="text-2xl font-medium leading-tight tracking-[-0.01em] text-noche">
+                  Formato según su operación
+                </h3>
+                <p class="mt-3 text-pizarra">
+                  Indíquenos el volumen y el formato que su empresa requiere. Le confirmaremos disponibilidad y
+                  condiciones en la cotización.
+                </p>
+              </div>
+              <div class="card p-8 md:p-9">
+                <h3 class="text-2xl font-medium leading-tight tracking-[-0.01em] text-noche">
+                  Especificaciones del producto
+                </h3>
+                <p class="mt-3 text-pizarra">
+                  Solicite las especificaciones técnicas junto con su cotización y resolveremos las consultas de su
+                  equipo de calidad.
+                </p>
+              </div>
+            </div>
+          )
+        }
+      </div>
+
+      <!-- Imagen ilustrativa generada por IA: sin leyenda, no afirma flota propia. -->
+      <div class="media aspect-[4/5]" data-clip-reveal data-parallax>
+        <Picture
+          src={truckImage}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 64rem) 42vw, 100vw"
+          alt="Camión cisterna de acero inoxidable con el logotipo de Orión"
+          loading="lazy"
+        />
+      </div>
+    </div>
+
+    {
+      hasFormats && (
+        <ul class="mt-14 grid gap-6 md:mt-20 md:grid-cols-2 lg:grid-cols-3" data-reveal-group>
+          {PRODUCT_FORMATS.map((format) => (
+            <li class="card flex flex-col p-8 md:p-9">
+              <h3 class="text-2xl font-medium leading-tight tracking-[-0.01em] text-noche">{format.name}</h3>
+              <p class="mt-3 grow text-pizarra">{format.description}</p>
+              {format.specSheetUrl && (
+                <a href={format.specSheetUrl} class="mt-5 font-semibold text-bronce underline underline-offset-4">
+                  Descargar ficha técnica
+                </a>
+              )}
+              <a href={QUOTE_ANCHOR} class="btn btn-secondary mt-7">
+                Cotizar este formato
+              </a>
+            </li>
+          ))}
+        </ul>
+      )
+    }
+
+    {
+      hasCertifications && (
+        <div class="mt-12" data-reveal>
+          <h3 class="text-xl font-medium text-noche">Certificaciones</h3>
+          <ul class="mt-4 flex flex-wrap gap-3">
+            {CERTIFICATIONS.map((certification) => (
+              <li class="rounded-full border border-noche/20 bg-white px-4 py-2 text-sm font-medium text-noche">
+                {certification}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )
+    }
+
+    <div class="mt-12 md:mt-16" data-reveal>
+      <a href={QUOTE_ANCHOR} class="btn btn-primary">Solicitar cotización <Arrow /></a>
+    </div>
+  </div>
+</section>

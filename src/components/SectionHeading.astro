@@ -1,0 +1,28 @@
+---
+// Encabezado de sección: eyebrow con filete dorado + titular editorial + bajada opcional.
+interface Props {
+  eyebrow: string;
+  title: string;
+  lead?: string;
+  /** Usar sobre fondos Azul Noche. */
+  onDark?: boolean;
+  class?: string;
+}
+
+const { eyebrow, title, lead, onDark = false, class: className } = Astro.props;
+---
+
+<div class:list={['max-w-[44rem]', className]}>
+  <p class:list={['eyebrow flex items-center gap-4', onDark ? 'text-oro' : 'text-bronce']} data-reveal>
+    <span class="rule" aria-hidden="true" data-rule></span>
+    {eyebrow}
+  </p>
+  <h2 class:list={['display-2 mt-6', onDark ? 'text-marfil' : 'text-noche']} data-split>{title}</h2>
+  {
+    lead && (
+      <p class:list={['mt-6 max-w-[36rem] text-base md:text-lg', onDark ? 'text-marfil/85' : 'text-pizarra']} data-reveal>
+        {lead}
+      </p>
+    )
+  }
+</div>

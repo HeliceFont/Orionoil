@@ -1,0 +1,61 @@
+---
+// Sección de respaldo. No incluye testimonios ni logos de clientes: todavía no hay datos verificados.
+// TODO: cuando existan clientes o testimonios reales en Chile, sumarlos aquí desde src/data/site.ts.
+import { Picture } from 'astro:assets';
+import Isotype from './Isotype.astro';
+import SectionHeading from './SectionHeading.astro';
+import cratesImage from '../assets/images/cajones-girasoles.jpg';
+import meetingImage from '../assets/images/sala-reuniones.jpg';
+---
+
+<section id="origen" class="bg-white py-24 md:py-36">
+  <div class="container-content grid items-center gap-16 lg:grid-cols-2 lg:gap-24">
+    <!-- Imágenes ilustrativas generadas por IA: sin leyenda. -->
+    <div class="relative pb-16 pr-[14%] md:pb-20">
+      <div class="media aspect-[4/5]" data-clip-reveal data-parallax>
+        <Picture
+          src={cratesImage}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960, 1280]}
+          sizes="(min-width: 64rem) 40vw, 86vw"
+          alt="Cajones de madera con girasoles recién cortados y el logotipo de Orión"
+          loading="lazy"
+        />
+      </div>
+      <div
+        class="media absolute bottom-0 right-0 aspect-square w-[46%] shadow-[0_0_0_10px_white]"
+        data-clip-reveal
+      >
+        <Picture
+          src={meetingImage}
+          formats={['avif', 'webp']}
+          widths={[320, 480, 720]}
+          sizes="(min-width: 64rem) 22vw, 46vw"
+          alt="Reunión de trabajo en una sala de oficina"
+          loading="lazy"
+          class="object-[0%_center]"
+        />
+      </div>
+    </div>
+
+    <div>
+      <SectionHeading eyebrow="Origen y trayectoria" title="De Lisboa al mercado chileno" />
+      <div class="mt-8 text-base text-pizarra md:text-lg" data-reveal>
+        <p>
+          Orión nace en Lisboa, Portugal, dedicada a la comercialización de aceite de girasol y con experiencia en
+          comercio internacional.
+        </p>
+        <p class="mt-5">
+          Hoy ponemos ese conocimiento al servicio de las empresas chilenas que buscan un proveedor especializado y un
+          trato directo.
+        </p>
+      </div>
+      <div class="mt-12 flex items-start gap-6 border-t border-oro-oscuro/60 pt-9" data-reveal>
+        <Isotype class="h-16 w-16 shrink-0 md:h-20 md:w-20" />
+        <p class="font-display text-xl italic leading-snug text-noche md:text-2xl">
+          En Chile, al cinturón de Orión lo llamamos Las Tres Marías. Son las tres estrellas de nuestro símbolo.
+        </p>
+      </div>
+    </div>
+  </div>
+</section>

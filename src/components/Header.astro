@@ -1,0 +1,81 @@
+---
+import Logo from './Logo.astro';
+import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
+---
+
+<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-noche/10 bg-marfil/95 backdrop-blur" data-header>
+  <div class="site-header-inner container-content flex items-center justify-between gap-6">
+    <a href="#inicio" aria-label={`${SITE.name} — ir al inicio`}>
+      <Logo />
+    </a>
+
+    <nav aria-label="Principal" class="hidden items-center gap-10 lg:flex">
+      <ul class="flex items-center gap-9">
+        {
+          NAV_LINKS.map((link) => (
+            <li>
+              <a href={link.href} class="nav-link text-[0.875rem] font-medium tracking-[0.02em] text-noche">
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+      <a href={QUOTE_ANCHOR} class="btn btn-primary">Solicitar cotización</a>
+    </nav>
+
+    <!-- Menú móvil: <details> funciona sin JavaScript -->
+    <details class="group lg:hidden" data-mobile-menu>
+      <summary
+        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-sm border border-noche/25 text-noche [&::-webkit-details-marker]:hidden"
+      >
+        <span class="sr-only">Menú</span>
+        <svg viewBox="0 0 24 24" class="h-6 w-6 group-open:hidden" aria-hidden="true" focusable="false">
+          <path d="M4 8h16M4 16h16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"></path>
+        </svg>
+        <svg viewBox="0 0 24 24" class="hidden h-6 w-6 group-open:block" aria-hidden="true" focusable="false">
+          <path d="M6 6l12 12M18 6L6 18" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"
+          ></path>
+        </svg>
+      </summary>
+      <nav
+        aria-label="Principal móvil"
+        class="absolute inset-x-0 top-full border-b border-noche/10 bg-marfil px-5 pb-7 pt-2 shadow-lg"
+      >
+        <ul class="flex flex-col">
+          {
+            NAV_LINKS.map((link) => (
+              <li class="border-b border-noche/10">
+                <a href={link.href} class="block py-4 font-display text-xl font-medium text-noche">
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+        <a href={QUOTE_ANCHOR} class="btn btn-primary mt-6 w-full">Solicitar cotización</a>
+      </nav>
+    </details>
+  </div>
+</header>
+
+<script>
+  // Cierra el menú móvil al elegir un enlace.
+  const menu = document.querySelector<HTMLDetailsElement>('[data-mobile-menu]');
+  menu?.querySelectorAll('a').forEach((link) => {
+    link.addEventListener('click', () => {
+      menu.open = false;
+    });
+  });
+
+  // Compacta el header al hacer scroll.
+  const header = document.querySelector<HTMLElement>('[data-header]');
+  const SCROLL_THRESHOLD = 24;
+
+  function syncHeader(): void {
+    header?.toggleAttribute('data-scrolled', window.scrollY > SCROLL_THRESHOLD);
+  }
+
+  syncHeader();
+  window.addEventListener('scroll', syncHeader, { passive: true });
+</script>

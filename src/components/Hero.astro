@@ -1,0 +1,52 @@
+---
+import { Picture } from 'astro:assets';
+import Arrow from './Arrow.astro';
+import heroImage from '../assets/images/campo-girasoles-agricultor.jpg';
+import { QUOTE_ANCHOR } from '../data/site';
+---
+
+<section
+  id="inicio"
+  class="on-dark relative isolate flex min-h-[100svh] items-end overflow-hidden bg-noche-profundo pt-18 md:pt-22 lg:items-center"
+>
+  <!-- TODO: imagen generada por IA; reemplazar por fotografía real de la empresa cuando exista. -->
+  <div class="absolute inset-x-0 bottom-0 top-18 -z-10 overflow-hidden md:top-22 lg:left-[24%]" data-hero-media>
+    <Picture
+      src={heroImage}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280, 1920, 2560]}
+      sizes="100vw"
+      alt="Agricultor en un campo de girasoles en flor al atardecer"
+      loading="eager"
+      fetchpriority="high"
+      class="h-full w-full origin-top object-cover object-[58%_top]"
+      pictureAttributes={{ class: 'block h-full w-full' }}
+    />
+  </div>
+  <!-- Velos que garantizan el contraste del texto sobre la imagen -->
+  <div
+    class="absolute inset-0 -z-10 bg-linear-to-t from-noche-profundo from-32% via-noche-profundo/85 via-64% to-noche-profundo/25 lg:bg-linear-to-r lg:from-noche-profundo lg:from-24% lg:via-noche-profundo/70 lg:via-48% lg:to-noche-profundo/5"
+    aria-hidden="true"
+  >
+  </div>
+  <div class="absolute inset-x-0 bottom-0 -z-10 h-40 bg-linear-to-t from-noche-profundo/80 to-transparent" aria-hidden="true">
+  </div>
+
+  <div class="container-content pb-16 pt-28 md:pb-24 lg:py-32">
+    <div class="max-w-[40rem]" data-hero-copy>
+      <p class="eyebrow flex items-center gap-4 text-oro">
+        <span class="rule" aria-hidden="true" data-hero-rule></span>
+        Importación directa · Distribución mayorista
+      </p>
+      <h1 class="display-1 mt-7 text-marfil" data-hero-title>Aceite de girasol premium para su empresa</h1>
+      <p class="mt-7 max-w-[33rem] text-base text-marfil/90 md:text-lg">
+        Orión importa y distribuye aceite de girasol al por mayor en Chile. Un proveedor especializado, con origen
+        europeo y experiencia en comercio internacional.
+      </p>
+      <div class="mt-10 flex flex-col gap-4 sm:flex-row">
+        <a href={QUOTE_ANCHOR} class="btn btn-primary">Solicitar cotización <Arrow /></a>
+        <a href="#producto" class="btn btn-light">Ver producto</a>
+      </div>
+    </div>
+  </div>
+</section>

@@ -1,0 +1,150 @@
+---
+import { Picture } from 'astro:assets';
+import Arrow from './Arrow.astro';
+import Isotype from './Isotype.astro';
+import SectionHeading from './SectionHeading.astro';
+import officeImage from '../assets/images/oficina-vidrio.jpg';
+import { CONTACT, QUOTE_ENDPOINT } from '../data/site';
+---
+
+<section id="cotizacion" class="on-dark relative isolate overflow-hidden bg-noche py-24 md:py-36">
+  <!-- Marca de agua decorativa -->
+  <div class="pointer-events-none absolute -right-40 -top-40 -z-10 h-[38rem] w-[38rem] opacity-[0.07]" aria-hidden="true" data-spin>
+    <Isotype class="h-full w-full" onDark />
+  </div>
+
+  <div class="container-content grid gap-14 lg:grid-cols-[0.9fr_1.1fr] lg:gap-20">
+    <div>
+      <SectionHeading
+        eyebrow="Cotización"
+        title="Cotice su próximo abastecimiento"
+        lead="Cuéntenos qué necesita su empresa. Con el volumen y el formato estimados podremos prepararle una propuesta a su medida."
+        onDark
+      />
+      {
+        CONTACT.email && (
+          <p class="mt-8 text-marfil/85" data-reveal>
+            También puede escribirnos a{' '}
+            <a href={`mailto:${CONTACT.email}`} class="font-semibold text-oro underline underline-offset-4">
+              {CONTACT.email}
+            </a>
+          </p>
+        )
+      }
+      <!-- Imagen ilustrativa generada por IA: sin leyenda, no describe oficinas propias. -->
+      <div class="media mt-12 hidden aspect-[4/3] bg-noche-profundo lg:block" data-clip-reveal data-parallax>
+        <Picture
+          src={officeImage}
+          formats={['avif', 'webp']}
+          widths={[480, 720, 960]}
+          sizes="36vw"
+          alt="Logotipo de Orión esmerilado sobre el vidrio de una oficina"
+          loading="lazy"
+          class="object-[78%_center]"
+        />
+      </div>
+    </div>
+
+    <form
+      class="rounded-sm border-t-2 border-oro bg-white p-6 text-noche shadow-[0_40px_80px_-48px_rgb(0_0_0/0.7)] md:p-11"
+      method="post"
+      action={QUOTE_ENDPOINT || undefined}
+      data-quote-form
+      data-endpoint={QUOTE_ENDPOINT}
+      data-reveal
+    >
+      <p class="text-sm text-pizarra">Los campos marcados con <span aria-hidden="true">*</span><span class="sr-only">asterisco</span> son obligatorios.</p>
+
+      <div class="mt-6 grid gap-5 sm:grid-cols-2">
+        <div class="sm:col-span-2">
+          <label for="q-empresa" class="mb-2 block text-sm font-semibold">Empresa *</label>
+          <input id="q-empresa" name="empresa" type="text" class="field" autocomplete="organization" required />
+        </div>
+        <div>
+          <label for="q-nombre" class="mb-2 block text-sm font-semibold">Nombre y apellido *</label>
+          <input id="q-nombre" name="nombre" type="text" class="field" autocomplete="name" required />
+        </div>
+        <div>
+          <label for="q-email" class="mb-2 block text-sm font-semibold">Correo electrónico *</label>
+          <input id="q-email" name="email" type="email" class="field" autocomplete="email" required />
+        </div>
+        <div>
+          <label for="q-telefono" class="mb-2 block text-sm font-semibold">Teléfono</label>
+          <input id="q-telefono" name="telefono" type="tel" class="field" autocomplete="tel" />
+        </div>
+        <div>
+          <label for="q-volumen" class="mb-2 block text-sm font-semibold">Volumen estimado</label>
+          <input
+            id="q-volumen"
+            name="volumen"
+            type="text"
+            class="field"
+            placeholder="Ej.: toneladas o litros por mes"
+          />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="q-formato" class="mb-2 block text-sm font-semibold">Formato requerido</label>
+          <input id="q-formato" name="formato" type="text" class="field" placeholder="Ej.: granel o envasado" />
+        </div>
+        <div class="sm:col-span-2">
+          <label for="q-mensaje" class="mb-2 block text-sm font-semibold">Mensaje</label>
+          <textarea id="q-mensaje" name="mensaje" rows="4" class="field resize-y"></textarea>
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-primary mt-8 w-full cursor-pointer">Solicitar cotización <Arrow /></button>
+
+      <p class="mt-4 hidden text-sm font-medium" role="status" aria-live="polite" data-quote-status></p>
+    </form>
+  </div>
+</section>
+
+<script>
+  const STATUS_KIND = {
+    SUCCESS: 'success',
+    ERROR: 'error',
+  } as const;
+
+  type StatusKind = (typeof STATUS_KIND)[keyof typeof STATUS_KIND];
+
+  const form = document.querySelector<HTMLFormElement>('[data-quote-form]');
+  const status = form?.querySelector<HTMLParagraphElement>('[data-quote-status]');
+  const submit = form?.querySelector<HTMLButtonElement>('button[type="submit"]');
+
+  function showStatus(kind: StatusKind, message: string): void {
+    if (!status) return;
+    status.textContent = message;
+    status.classList.remove('hidden', 'text-success', 'text-error');
+    status.classList.add(kind === STATUS_KIND.SUCCESS ? 'text-success' : 'text-error');
+  }
+
+  form?.addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const endpoint = form.dataset.endpoint ?? '';
+
+    // Sin endpoint configurado no se envía nada: se informa con honestidad.
+    if (!endpoint) {
+      showStatus(
+        STATUS_KIND.ERROR,
+        'El envío en línea todavía no está habilitado. Su solicitud no fue enviada.',
+      );
+      return;
+    }
+
+    if (submit) submit.disabled = true;
+    try {
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        body: new FormData(form),
+        headers: { Accept: 'application/json' },
+      });
+      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      form.reset();
+      showStatus(STATUS_KIND.SUCCESS, 'Recibimos su solicitud. Le responderemos a la brevedad.');
+    } catch {
+      showStatus(STATUS_KIND.ERROR, 'No pudimos enviar su solicitud. Por favor, inténtelo nuevamente.');
+    } finally {
+      if (submit) submit.disabled = false;
+    }
+  });
+</script>

@@ -1,0 +1,14 @@
+---
+// Definiciones SVG compartidas por el isotipo. Se incluye una sola vez en el layout.
+const PETAL_ANGLES = [0, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330] as const;
+---
+
+<svg width="0" height="0" class="absolute" aria-hidden="true" focusable="false">
+  <defs>
+    <path id="orion-petalo" d="M70 8 C83 22 82 34 70 44 C58 34 57 22 70 8 Z"></path>
+    <g id="orion-corona">
+      {PETAL_ANGLES.map((angle) => <use href="#orion-petalo" transform={`rotate(${angle} 70 70)`} />)}
+    </g>
+    <path id="orion-estrella" d="M0 -7 Q1.4 -1.4 7 0 Q1.4 1.4 0 7 Q-1.4 1.4 -7 0 Q-1.4 -1.4 0 -7 Z"></path>
+  </defs>
+</svg>

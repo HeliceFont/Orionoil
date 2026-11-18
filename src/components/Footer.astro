@@ -1,0 +1,82 @@
+---
+import Logo from './Logo.astro';
+import { CONTACT, NAV_LINKS, QUOTE_ANCHOR, SITE, SOCIAL_LINKS } from '../data/site';
+
+const year = new Date().getFullYear();
+const hasContact = Boolean(CONTACT.email || CONTACT.phone || CONTACT.address);
+---
+
+<footer class="on-dark border-t border-oro/40 bg-noche-profundo text-marfil">
+  <div class="container-content grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:py-24">
+    <div>
+      <Logo variant="negative" showTagline />
+      <p class="mt-5 max-w-[20rem] text-[0.9375rem] text-marfil/80">
+        Importación y distribución mayorista de aceite de girasol para empresas en Chile.
+      </p>
+    </div>
+
+    <nav aria-label="Pie de página">
+      <h2 class="eyebrow text-oro">Secciones</h2>
+      <ul class="mt-4 flex flex-col gap-2.5">
+        {
+          NAV_LINKS.map((link) => (
+            <li>
+              <a href={link.href} class="text-[0.9375rem] text-marfil/85 hover:text-oro">
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <a href={QUOTE_ANCHOR} class="text-[0.9375rem] text-marfil/85 hover:text-oro">Solicitar cotización</a>
+        </li>
+      </ul>
+    </nav>
+
+    <div>
+      <h2 class="eyebrow text-oro">Contacto</h2>
+      {
+        hasContact ? (
+          <address class="mt-4 flex flex-col gap-2.5 text-[0.9375rem] not-italic text-marfil/85">
+            {CONTACT.email && (
+              <a href={`mailto:${CONTACT.email}`} class="hover:text-oro">
+                {CONTACT.email}
+              </a>
+            )}
+            {CONTACT.phone && (
+              <a href={`tel:${CONTACT.phone.replace(/\s+/g, '')}`} class="hover:text-oro">
+                {CONTACT.phone}
+              </a>
+            )}
+            {CONTACT.address && <span>{CONTACT.address}</span>}
+          </address>
+        ) : (
+          <p class="mt-4 text-[0.9375rem] text-marfil/85">
+            Escríbanos a través del{' '}
+            <a href={QUOTE_ANCHOR} class="font-semibold text-oro underline underline-offset-4">
+              formulario de cotización
+            </a>
+            .
+          </p>
+        )
+      }
+      {
+        SOCIAL_LINKS.length > 0 && (
+          <ul class="mt-5 flex flex-wrap gap-4">
+            {SOCIAL_LINKS.map((social) => (
+              <li>
+                <a href={social.href} class="text-[0.9375rem] text-marfil/85 hover:text-oro" rel="noopener">
+                  {social.label}
+                </a>
+              </li>
+            ))}
+          </ul>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="border-t border-marfil/15">
+    <p class="container-content py-6 text-sm text-marfil/70">© {year} {SITE.legalName}. Todos los derechos reservados.</p>
+  </div>
+</footer>

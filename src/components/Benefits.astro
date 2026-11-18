@@ -1,0 +1,45 @@
+---
+import { Picture } from 'astro:assets';
+import SectionHeading from './SectionHeading.astro';
+import labImage from '../assets/images/laboratorio-analisis.jpg';
+import { BENEFITS } from '../data/site';
+---
+
+<section id="beneficios" class="py-24 md:py-36">
+  <div class="container-content grid items-start gap-14 lg:grid-cols-[0.82fr_1.18fr] lg:gap-24">
+    <!-- Imagen ilustrativa generada por IA: sin leyenda, no describe instalaciones propias. -->
+    <div class="media aspect-[4/5] lg:sticky lg:top-28" data-clip-reveal data-parallax>
+      <Picture
+        src={labImage}
+        formats={['avif', 'webp']}
+        widths={[480, 720, 960, 1280]}
+        sizes="(min-width: 64rem) 40vw, 100vw"
+        alt="Análisis de una muestra de aceite con una pipeta en un laboratorio"
+        loading="lazy"
+        class="object-[72%_center]"
+      />
+    </div>
+
+    <div>
+      <SectionHeading eyebrow="Por qué Orión" title="Un proveedor a la altura de su operación" />
+
+      <ol class="mt-12 border-t border-noche/15 md:mt-16" data-reveal-group>
+        {
+          BENEFITS.map((benefit, index) => (
+            <li class="grid gap-x-8 gap-y-3 border-b border-noche/15 py-9 sm:grid-cols-[4.5rem_1fr] md:py-11">
+              <span class="font-display text-xl font-medium text-bronce" aria-hidden="true">
+                {String(index + 1).padStart(2, '0')}
+              </span>
+              <div>
+                <h3 class="text-2xl font-medium leading-tight tracking-[-0.01em] text-noche md:text-[1.875rem]">
+                  {benefit.title}
+                </h3>
+                <p class="mt-3.5 max-w-[34rem] text-pizarra">{benefit.description}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </div>
+</section>
