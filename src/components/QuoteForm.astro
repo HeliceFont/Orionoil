@@ -92,6 +92,12 @@ import { CONTACT, QUOTE_ENDPOINT } from '../data/site';
         </div>
       </div>
 
+      <!-- Trampa para bots: oculta para personas y lectores de pantalla. -->
+      <div class="absolute -left-[9999px]" aria-hidden="true">
+        <label for="q-sitio">No completar</label>
+        <input id="q-sitio" name="sitio" type="text" tabindex="-1" autocomplete="off" />
+      </div>
+
       <button type="submit" class="btn btn-primary mt-8 w-full cursor-pointer">Solicitar cotización <Arrow /></button>
 
       <p class="mt-4 hidden text-sm font-medium" role="status" aria-live="polite" data-quote-status></p>
@@ -138,7 +144,10 @@ import { CONTACT, QUOTE_ENDPOINT } from '../data/site';
         body: new FormData(form),
         headers: { Accept: 'application/json' },
       });
-      if (!response.ok) throw new Error(`HTTP ${response.status}`);
+      // Se exige el JSON del script: si el servidor no ejecuta PHP podría devolver 200 con otro contenido.
+      const result: unknown = await response.json().catch(() => null);
+      const confirmed = typeof result === 'object' && result !== null && (result as { ok?: unknown }).ok === true;
+      if (!response.ok || !confirmed) throw new Error(`HTTP ${response.status}`);
       form.reset();
       showStatus(STATUS_KIND.SUCCESS, 'Recibimos su solicitud. Le responderemos a la brevedad.');
     } catch {

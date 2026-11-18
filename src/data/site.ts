@@ -68,17 +68,17 @@ export const NAV_LINKS: readonly NavLink[] = [
 export const QUOTE_ANCHOR = '#cotizacion';
 
 /**
- * TODO: endpoint que recibirá el formulario de cotización (Formspree, API propia, etc.).
- * Mientras esté vacío, el formulario NO envía nada y lo informa al usuario.
+ * Endpoint del formulario de cotización: public/cotizacion.php lo envía por mail() a info@orionoil.cl.
+ * Requiere que el hosting ejecute PHP (Hostinger, despliegue en public_html). En `astro dev` no funciona.
+ * Vacío = el formulario NO envía nada y lo informa al usuario.
  */
-export const QUOTE_ENDPOINT: string = '';
+export const QUOTE_ENDPOINT: string = '/cotizacion.php';
 
 /**
- * TODO: datos de contacto reales en Chile. Los campos vacíos no se muestran.
- * El sitio portugués usa info@orion.pt, que no coincide con el dominio: confirmar el correo definitivo.
+ * TODO: completar teléfono, WhatsApp y dirección en Chile. Los campos vacíos no se muestran.
  */
 export const CONTACT: ContactInfo = {
-  email: '',
+  email: 'info@orionoil.cl',
   phone: '',
   whatsapp: '',
   address: '',
