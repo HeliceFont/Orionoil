@@ -168,6 +168,51 @@ function animateProcess(): void {
   });
 }
 
+function animateShowpieces(): void {
+  // Barra de progreso de lectura en el header.
+  gsap.to('[data-scroll-progress]', {
+    scaleX: 1,
+    ease: 'none',
+    scrollTrigger: { start: 0, end: 'max', scrub: 0.3 },
+  });
+
+  // Imagen que se expande hasta el ancho completo.
+  gsap.utils.toArray<HTMLElement>('[data-expand]').forEach((frame) => {
+    gsap.fromTo(
+      frame,
+      { scale: 0.8, borderRadius: '1.5rem' },
+      {
+        scale: 1,
+        borderRadius: '0.25rem',
+        ease: 'none',
+        scrollTrigger: { trigger: frame, start: 'top 95%', end: 'top 18%', scrub: 0.5 },
+      },
+    );
+  });
+
+  // Manifiesto: las palabras se encienden a medida que se avanza.
+  const manifesto = document.querySelector<HTMLElement>('[data-manifesto]');
+  if (manifesto) {
+    document.fonts.ready.then(() => {
+      const split = SplitText.create(manifesto, { type: 'words' });
+      gsap.fromTo(
+        split.words,
+        { opacity: 0.14 },
+        {
+          opacity: 1,
+          ease: 'none',
+          stagger: 0.12,
+          scrollTrigger: { trigger: manifesto, start: 'top 82%', end: 'bottom 48%', scrub: 0.4 },
+        },
+      );
+    });
+  }
+
+  // Sello e indicador del hero: entran al final de la secuencia inicial.
+  gsap.from('[data-hero-seal]', { autoAlpha: 0, scale: 0.7, duration: 1.2, ease: 'power3.out', delay: 1.3 });
+  gsap.from('[data-hero-cue]', { autoAlpha: 0, y: 16, duration: 0.9, ease: 'power2.out', delay: 1.5 });
+}
+
 function animateBrand(): void {
   // Giro muy lento del girasol en la marca de agua.
   gsap.to('[data-spin] [data-isotipo]', {
@@ -190,6 +235,7 @@ if (!prefersReducedMotion) {
   animateMedia();
   animateProcess();
   animateBrand();
+  animateShowpieces();
 
   // Las imágenes diferidas cambian alturas: se recalculan los disparadores al terminar de cargar.
   window.addEventListener('load', () => ScrollTrigger.refresh());

@@ -263,7 +263,9 @@
   .site-header {
     transition:
       box-shadow 260ms ease,
-      background-color 260ms ease;
+      background-color 260ms ease,
+      color 260ms ease,
+      border-color 260ms ease;
   }
 
   .site-header-inner {
@@ -313,5 +315,181 @@
 
   .field[aria-invalid="true"] {
     border-color: var(--color-error);
+  }
+}
+
+/* ───────── Rediseño cinematográfico ───────── */
+@layer components {
+  /* Titular del hero */
+  .display-hero {
+    font-size: clamp(2.875rem, 7.6vw, 7.75rem);
+    font-weight: 520;
+    letter-spacing: -0.035em;
+    line-height: 0.98;
+  }
+
+  /* Palabra destacada en cursiva dorada (solo sobre fondos oscuros) */
+  .accent {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-oro);
+  }
+
+  .accent-light {
+    font-style: italic;
+    font-weight: 400;
+    color: var(--color-bronce);
+  }
+
+  /* Numeral decorativo de contorno */
+  .numeral {
+    font-family: var(--font-display);
+    font-size: clamp(3.25rem, 5vw, 4.75rem);
+    font-weight: 400;
+    line-height: 1;
+    color: transparent;
+    -webkit-text-stroke: 1px var(--color-oro-oscuro);
+  }
+
+  .on-dark .numeral {
+    -webkit-text-stroke-color: var(--color-oro);
+  }
+
+  /* Cielo estrellado sutil para fondos oscuros (el contenedor debe ser relative + isolate) */
+  .starfield::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.55;
+    background-image:
+      radial-gradient(circle at 12% 18%, #faf6ec 0 1px, transparent 1.6px),
+      radial-gradient(circle at 64% 9%, #faf6ec 0 0.8px, transparent 1.4px),
+      radial-gradient(circle at 38% 52%, #e8a917 0 1px, transparent 1.6px),
+      radial-gradient(circle at 86% 61%, #faf6ec 0 1.2px, transparent 1.8px),
+      radial-gradient(circle at 22% 84%, #faf6ec 0 0.8px, transparent 1.4px),
+      radial-gradient(circle at 71% 88%, #faf6ec 0 1px, transparent 1.6px);
+    background-size:
+      420px 420px,
+      520px 520px,
+      640px 640px,
+      460px 460px,
+      580px 580px,
+      380px 380px;
+  }
+
+  /* Header transparente sobre el hero. Sin JS queda sólido (data-top lo aplica el script). */
+  .site-header {
+    border-bottom: 1px solid color-mix(in srgb, var(--color-noche) 10%, transparent);
+    background-color: color-mix(in srgb, var(--color-marfil) 95%, transparent);
+    backdrop-filter: blur(8px);
+    color: var(--color-noche);
+  }
+
+  .site-header[data-top]:not(:has(details[open])) {
+    border-bottom-color: transparent;
+    background-color: transparent;
+    backdrop-filter: none;
+    color: var(--color-marfil);
+  }
+
+  .site-header .logo-negative,
+  .site-header[data-top]:not(:has(details[open])) .logo-positive {
+    display: none;
+  }
+
+  .site-header[data-top]:not(:has(details[open])) .logo-negative {
+    display: block;
+  }
+
+  .site-header[data-top]:not(:has(details[open])) .nav-link::after {
+    background-color: var(--color-oro);
+  }
+
+  /* Cinta en movimiento */
+  .marquee {
+    display: flex;
+    overflow: hidden;
+    user-select: none;
+  }
+
+  .marquee-track {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    min-width: 100%;
+    animation: marquee 38s linear infinite;
+  }
+
+  .marquee:hover .marquee-track {
+    animation-play-state: paused;
+  }
+
+  @keyframes marquee {
+    to {
+      transform: translateX(-100%);
+    }
+  }
+
+  /* Sello giratorio del hero */
+  .seal-ring {
+    transform-origin: 50% 50%;
+    animation: seal-spin 26s linear infinite;
+  }
+
+  @keyframes seal-spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  /* Indicador de scroll */
+  .scroll-cue-line {
+    position: relative;
+    display: block;
+    height: 3.5rem;
+    width: 1px;
+    overflow: hidden;
+    background-color: color-mix(in srgb, var(--color-marfil) 25%, transparent);
+  }
+
+  .scroll-cue-line::after {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-color: var(--color-oro);
+    animation: scroll-cue 2.2s ease-in-out infinite;
+  }
+
+  @keyframes scroll-cue {
+    0% {
+      transform: translateY(-100%);
+    }
+    60%,
+    100% {
+      transform: translateY(100%);
+    }
+  }
+
+  /* Fila de beneficio: filete dorado que crece al pasar el cursor */
+  .benefit-row {
+    position: relative;
+  }
+
+  .benefit-row::after {
+    content: "";
+    position: absolute;
+    inset-inline: 0;
+    bottom: -1px;
+    height: 2px;
+    background-color: var(--color-oro-oscuro);
+    transform: scaleX(0);
+    transform-origin: left center;
+    transition: transform 520ms cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .benefit-row:hover::after {
+    transform: scaleX(1);
   }
 }

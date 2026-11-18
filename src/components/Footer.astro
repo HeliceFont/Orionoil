@@ -6,7 +6,7 @@ const year = new Date().getFullYear();
 const hasContact = Boolean(CONTACT.email || CONTACT.phone || CONTACT.address);
 ---
 
-<footer class="on-dark border-t border-oro/40 bg-noche-profundo text-marfil">
+<footer class="on-dark starfield relative isolate overflow-hidden border-t border-oro/40 bg-noche-profundo text-marfil">
   <div class="container-content grid gap-12 py-16 md:grid-cols-[1.4fr_1fr_1fr] md:py-24">
     <div>
       <Logo variant="negative" showTagline />
@@ -74,6 +74,11 @@ const hasContact = Boolean(CONTACT.email || CONTACT.phone || CONTACT.address);
         )
       }
     </div>
+  </div>
+
+  <!-- Logotipo monumental decorativo -->
+  <div class="container-content pb-10 md:pb-14" aria-hidden="true" data-reveal>
+    <img src="/logo-orion-negativo.svg" alt="" width="3719" height="1343" loading="lazy" decoding="async" class="h-auto w-full" />
   </div>
 
   <div class="border-t border-marfil/15">

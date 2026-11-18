@@ -2,16 +2,16 @@
 import { TRUST_ITEMS } from '../data/site';
 ---
 
-<section aria-label="Orión en breve" class="on-dark bg-noche">
-  <div class="container-content py-14 md:py-18">
+<section aria-label="Orión en breve" class="on-dark starfield relative isolate bg-noche">
+  <div class="container-content py-20 md:py-28">
     <ul class="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {
         TRUST_ITEMS.map((item, index) => (
-          <li class="border-t border-oro/50 pt-6">
-            <p class="eyebrow text-marfil/60" aria-hidden="true">
+          <li class="border-t border-oro/50 pt-7">
+            <p class="numeral" aria-hidden="true">
               {String(index + 1).padStart(2, '0')}
             </p>
-            <p class="mt-3 font-display text-[1.625rem] font-medium leading-tight tracking-[-0.01em] text-oro">
+            <p class="mt-5 font-display text-[1.625rem] font-medium leading-tight tracking-[-0.01em] text-oro">
               {item.title}
             </p>
             <p class="mt-2.5 text-[0.9375rem] text-marfil/85">{item.description}</p>

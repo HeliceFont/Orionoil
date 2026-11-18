@@ -1,0 +1,29 @@
+---
+// Frase manifiesto: las palabras se encienden con el scroll. Sin JS se lee completa.
+import Isotype from './Isotype.astro';
+---
+
+<section aria-label="Nuestro símbolo" class="relative isolate overflow-hidden bg-marfil py-28 md:py-44">
+  <div
+    class="pointer-events-none absolute left-1/2 top-1/2 -z-10 h-[46rem] w-[46rem] -translate-x-1/2 -translate-y-1/2 opacity-[0.09]"
+    aria-hidden="true"
+    data-spin
+  >
+    <Isotype class="h-full w-full" />
+  </div>
+
+  <div class="container-content text-center">
+    <p class="eyebrow flex items-center justify-center gap-4 text-bronce" data-reveal>
+      <span class="rule" aria-hidden="true" data-rule></span>
+      Nuestro símbolo
+      <span class="rule origin-right" aria-hidden="true" data-rule></span>
+    </p>
+    <p
+      class="mx-auto mt-10 max-w-[58rem] font-display text-[clamp(2rem,4.6vw,4.25rem)] font-medium leading-[1.12] tracking-[-0.025em] text-noche"
+      data-manifesto
+    >
+      En Chile, al cinturón de Orión lo llamamos <em class="accent-light">Las Tres Marías</em>. Es la constelación
+      que lleva nuestro símbolo.
+    </p>
+  </div>
+</section>

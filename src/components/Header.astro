@@ -3,10 +3,11 @@ import Logo from './Logo.astro';
 import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
 ---
 
-<header class="site-header fixed inset-x-0 top-0 z-50 border-b border-noche/10 bg-marfil/95 backdrop-blur" data-header>
+<header class="site-header fixed inset-x-0 top-0 z-50" data-header>
   <div class="site-header-inner container-content flex items-center justify-between gap-6">
     <a href="#inicio" aria-label={`${SITE.name} — ir al inicio`}>
-      <Logo />
+      <span class="logo-positive"><Logo /></span>
+      <span class="logo-negative"><Logo variant="negative" /></span>
     </a>
 
     <nav aria-label="Principal" class="hidden items-center gap-10 lg:flex">
@@ -14,7 +15,7 @@ import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
         {
           NAV_LINKS.map((link) => (
             <li>
-              <a href={link.href} class="nav-link text-[0.875rem] font-medium tracking-[0.02em] text-noche">
+              <a href={link.href} class="nav-link text-[0.875rem] font-medium tracking-[0.02em]">
                 {link.label}
               </a>
             </li>
@@ -27,7 +28,7 @@ import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
     <!-- Menú móvil: <details> funciona sin JavaScript -->
     <details class="group lg:hidden" data-mobile-menu>
       <summary
-        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-sm border border-noche/25 text-noche [&::-webkit-details-marker]:hidden"
+        class="flex h-11 w-11 cursor-pointer list-none items-center justify-center rounded-sm border border-current/30 [&::-webkit-details-marker]:hidden"
       >
         <span class="sr-only">Menú</span>
         <svg viewBox="0 0 24 24" class="h-6 w-6 group-open:hidden" aria-hidden="true" focusable="false">
@@ -40,7 +41,7 @@ import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
       </summary>
       <nav
         aria-label="Principal móvil"
-        class="absolute inset-x-0 top-full border-b border-noche/10 bg-marfil px-5 pb-7 pt-2 shadow-lg"
+        class="absolute inset-x-0 top-full border-b border-noche/10 bg-marfil px-5 pb-7 pt-2 text-noche shadow-lg"
       >
         <ul class="flex flex-col">
           {
@@ -57,6 +58,8 @@ import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
       </nav>
     </details>
   </div>
+  <!-- Progreso de lectura: lo anima el script; sin JS queda oculto. -->
+  <div class="absolute inset-x-0 bottom-0 h-0.5 origin-left scale-x-0 bg-oro" aria-hidden="true" data-scroll-progress></div>
 </header>
 
 <script>
@@ -73,7 +76,10 @@ import { NAV_LINKS, QUOTE_ANCHOR, SITE } from '../data/site';
   const SCROLL_THRESHOLD = 24;
 
   function syncHeader(): void {
-    header?.toggleAttribute('data-scrolled', window.scrollY > SCROLL_THRESHOLD);
+    const scrolled = window.scrollY > SCROLL_THRESHOLD;
+    header?.toggleAttribute('data-scrolled', scrolled);
+    // Arriba del todo el header es transparente sobre el hero.
+    header?.toggleAttribute('data-top', !scrolled);
   }
 
   syncHeader();

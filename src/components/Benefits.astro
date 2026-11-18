@@ -1,7 +1,7 @@
 ---
 import { Picture } from 'astro:assets';
 import SectionHeading from './SectionHeading.astro';
-import labImage from '../assets/images/laboratorio-analisis.jpg';
+import labImage from '../assets/images/laboratorio-analisis.png';
 import { BENEFITS } from '../data/site';
 ---
 
@@ -26,12 +26,12 @@ import { BENEFITS } from '../data/site';
       <ol class="mt-12 border-t border-noche/15 md:mt-16" data-reveal-group>
         {
           BENEFITS.map((benefit, index) => (
-            <li class="grid gap-x-8 gap-y-3 border-b border-noche/15 py-9 sm:grid-cols-[4.5rem_1fr] md:py-11">
-              <span class="font-display text-xl font-medium text-bronce" aria-hidden="true">
+            <li class="benefit-row grid gap-x-10 gap-y-4 border-b border-noche/15 py-10 sm:grid-cols-[6.5rem_1fr] md:py-14">
+              <span class="numeral" aria-hidden="true">
                 {String(index + 1).padStart(2, '0')}
               </span>
               <div>
-                <h3 class="text-2xl font-medium leading-tight tracking-[-0.01em] text-noche md:text-[1.875rem]">
+                <h3 class="text-[1.75rem] font-medium leading-tight tracking-[-0.015em] text-noche md:text-[2.25rem]">
                   {benefit.title}
                 </h3>
                 <p class="mt-3.5 max-w-[34rem] text-pizarra">{benefit.description}</p>
