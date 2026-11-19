@@ -1,8 +1,10 @@
 ---
+import Constellation from './Constellation.astro';
 import { TRUST_ITEMS } from '../data/site';
 ---
 
-<section aria-label="Orión en breve" class="on-dark starfield relative isolate bg-noche">
+<section aria-label="Orión en breve" class="on-dark starfield relative isolate overflow-hidden bg-noche">
+  <Constellation class="-top-[12%] right-[2%] h-[124%] opacity-30 md:right-[7%] md:opacity-35" />
   <div class="container-content py-20 md:py-28">
     <ul class="grid gap-x-10 gap-y-10 sm:grid-cols-2 lg:grid-cols-4" data-reveal-group>
       {

@@ -1,11 +1,13 @@
 ---
 import { Picture } from 'astro:assets';
+import Constellation from './Constellation.astro';
 import SectionHeading from './SectionHeading.astro';
 import plantImage from '../assets/images/planta-silos.jpg';
 import { PROCESS_STEPS } from '../data/site';
 ---
 
 <section id="proceso" class="on-dark starfield relative isolate overflow-hidden bg-noche-profundo py-24 md:py-36">
+  <Constellation class="-right-[18%] top-6 h-[21rem] opacity-30 md:right-[8%] md:top-14 md:h-[24rem] md:opacity-70" />
   <div class="container-content">
     <SectionHeading eyebrow="Cómo trabajamos" title="Del origen a su empresa, en cuatro pasos" onDark />
   </div>

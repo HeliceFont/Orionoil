@@ -1,0 +1,94 @@
+---
+// Constelación de Orión decorativa para los fondos oscuros.
+// Mismas coordenadas que el isotipo (brand/tools/gen-isotipo.cjs).
+// Sin JS se ve completa y quieta; el script traza las líneas y enciende las estrellas al entrar en pantalla.
+interface Props {
+  class?: string;
+}
+
+const { class: className } = Astro.props;
+
+const POINTS = {
+  hombroIzq: [350, 345],
+  cabeza: [475, 292],
+  hombroDer: [545, 365],
+  cinturaDer: [497, 505],
+  cinturaMedio: [461, 527],
+  cinturaIzq: [425, 548],
+  pieIzq: [345, 752],
+  pieDer: [632, 712],
+  brazoIzq: [245, 235],
+  manoIzq: [300, 150],
+  brazoDer: [762, 330],
+  codoDer: [742, 462],
+  manoDer: [712, 268],
+} as const;
+
+type PointName = keyof typeof POINTS;
+
+const LINES: readonly (readonly [PointName, PointName])[] = [
+  ['manoIzq', 'brazoIzq'],
+  ['brazoIzq', 'hombroIzq'],
+  ['hombroIzq', 'cabeza'],
+  ['cabeza', 'hombroDer'],
+  ['hombroIzq', 'cinturaIzq'],
+  ['hombroDer', 'cinturaDer'],
+  ['cinturaIzq', 'cinturaDer'],
+  ['cinturaIzq', 'pieIzq'],
+  ['cinturaDer', 'pieDer'],
+  ['hombroDer', 'brazoDer'],
+  ['brazoDer', 'manoDer'],
+  ['brazoDer', 'codoDer'],
+];
+
+// Tamaño de cada estrella. Las tres del cinturón (Las Tres Marías) van en dorado.
+const STARS: readonly { point: PointName; size: number; belt?: boolean }[] = [
+  { point: 'hombroIzq', size: 17 },
+  { point: 'hombroDer', size: 15 },
+  { point: 'cabeza', size: 10 },
+  { point: 'cinturaIzq', size: 14, belt: true },
+  { point: 'cinturaMedio', size: 14, belt: true },
+  { point: 'cinturaDer', size: 14, belt: true },
+  { point: 'pieIzq', size: 15 },
+  { point: 'pieDer', size: 18 },
+  { point: 'brazoIzq', size: 10 },
+  { point: 'manoIzq', size: 8 },
+  { point: 'brazoDer', size: 11 },
+  { point: 'codoDer', size: 8 },
+  { point: 'manoDer', size: 8 },
+];
+
+const STAR_PATH = 'M0 -1 Q0.14 -0.14 1 0 Q0.14 0.14 0 1 Q-0.14 0.14 -1 0 Q-0.14 -0.14 0 -1 Z';
+---
+
+<svg
+  viewBox="200 110 610 690"
+  class:list={['constellation pointer-events-none absolute -z-10', className]}
+  aria-hidden="true"
+  focusable="false"
+  data-constellation
+>
+  <g fill="none" stroke="#faf6ec" stroke-opacity="0.55" stroke-width="1.6" stroke-linecap="round">
+    {
+      LINES.map(([from, to]) => (
+        <path
+          d={`M${POINTS[from][0]} ${POINTS[from][1]} L${POINTS[to][0]} ${POINTS[to][1]}`}
+          pathLength="1"
+          data-constellation-line
+        />
+      ))
+    }
+  </g>
+  {
+    STARS.map(({ point, size, belt }, index) => (
+      <g transform={`translate(${POINTS[point][0]} ${POINTS[point][1]})`}>
+        <g data-constellation-star>
+          <g class="constellation-star" style={`--delay: ${((index * 0.47) % 3.2).toFixed(2)}s`}>
+            <circle r={size * 1.5} fill={belt ? '#e8a917' : '#faf6ec'} fill-opacity="0.12" />
+            <path d={STAR_PATH} transform={`scale(${size})`} fill={belt ? '#e8a917' : '#faf6ec'} />
+          </g>
+        </g>
+      </g>
+    ))
+  }
+</svg>

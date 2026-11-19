@@ -493,3 +493,26 @@
     transform: scaleX(1);
   }
 }
+
+/* Máscaras de SplitText: el recorte por línea se comía descendentes (g, p), tildes y la cursiva.
+   Se agranda la caja de la máscara y se compensa con márgenes negativos para no mover el texto. */
+.split-line-mask {
+  padding: 0.14em 0.1em 0.24em;
+  margin: -0.14em -0.1em -0.24em;
+}
+
+/* Constelación de Orión: titilado de las estrellas */
+.constellation-star {
+  animation: twinkle 3.4s ease-in-out infinite;
+  animation-delay: var(--delay, 0s);
+}
+
+@keyframes twinkle {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.35;
+  }
+}

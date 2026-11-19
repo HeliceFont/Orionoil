@@ -52,6 +52,7 @@ function animateHero(): void {
       SplitText.create(title, {
         type: 'lines',
         mask: 'lines',
+        linesClass: 'split-line',
         autoSplit: true,
         onSplit(self) {
           gsap.set(title, { autoAlpha: 1 });
@@ -68,6 +69,7 @@ function animateHeadings(): void {
       SplitText.create(heading, {
         type: 'lines',
         mask: 'lines',
+        linesClass: 'split-line',
         autoSplit: true,
         onSplit(self) {
           return gsap.from(self.lines, {
@@ -213,6 +215,27 @@ function animateShowpieces(): void {
   gsap.from('[data-hero-cue]', { autoAlpha: 0, y: 16, duration: 0.9, ease: 'power2.out', delay: 1.5 });
 }
 
+function animateConstellations(): void {
+  // Orión se dibuja al entrar en pantalla: primero las líneas, después se encienden las estrellas.
+  gsap.utils.toArray<SVGElement>('[data-constellation]').forEach((constellation) => {
+    const lines = constellation.querySelectorAll('[data-constellation-line]');
+    const stars = constellation.querySelectorAll('[data-constellation-star]');
+
+    gsap.set(lines, { strokeDasharray: 1, strokeDashoffset: 1 });
+    gsap
+      .timeline({ scrollTrigger: { trigger: constellation, start: 'top 80%', once: true } })
+      .from(stars, { scale: 0, autoAlpha: 0, duration: 0.7, ease: 'back.out(2.2)', stagger: 0.07 })
+      .to(lines, { strokeDashoffset: 0, duration: 0.9, ease: 'power2.inOut', stagger: 0.11 }, 0.25);
+
+    // Deriva lenta con el scroll, para dar profundidad.
+    gsap.fromTo(
+      constellation,
+      { yPercent: -6 },
+      { yPercent: 6, ease: 'none', scrollTrigger: { trigger: constellation, start: 'top bottom', end: 'bottom top', scrub: true } },
+    );
+  });
+}
+
 function animateBrand(): void {
   // Giro muy lento del girasol en la marca de agua.
   gsap.to('[data-spin] [data-isotipo]', {
@@ -236,6 +259,7 @@ if (!prefersReducedMotion) {
   animateProcess();
   animateBrand();
   animateShowpieces();
+  animateConstellations();
 
   // Las imágenes diferidas cambian alturas: se recalculan los disparadores al terminar de cargar.
   window.addEventListener('load', () => ScrollTrigger.refresh());
