@@ -56,6 +56,25 @@ const STARS: readonly (readonly [PointName, number])[] = [
   ['manoDer', 26],
 ];
 
+// Estrellas de fondo sobre la cubierta oscura. Posiciones fijas (generador determinista) para que
+// el HTML sea igual en cada build. El área excede el viewBox porque la cubierta desborda en pantallas
+// anchas (hacia los lados) y en móviles (hacia arriba y abajo).
+const SKY = { COUNT: 150, MIN_X: -420, MAX_X: 1430, MIN_Y: -620, MAX_Y: 1520 } as const;
+let seed = 20261118;
+const random = (): number => {
+  seed = (seed * 16807) % 2147483647;
+  return seed / 2147483647;
+};
+const SKY_DOTS = Array.from({ length: SKY.COUNT }, () => ({
+  x: Math.round(SKY.MIN_X + random() * (SKY.MAX_X - SKY.MIN_X)),
+  y: Math.round(SKY.MIN_Y + random() * (SKY.MAX_Y - SKY.MIN_Y)),
+  radius: (0.9 + random() * 1.9).toFixed(1),
+  opacity: (0.35 + random() * 0.55).toFixed(2),
+  gold: random() > 0.84,
+  twinkles: random() > 0.45,
+  delay: (random() * 4).toFixed(2),
+}));
+
 const STAR_PATH = 'M0 -1 Q0.14 -0.14 1 0 Q0.14 0.14 0 1 Q-0.14 0.14 -1 0 Q-0.14 -0.14 0 -1 Z';
 ---
 
@@ -108,6 +127,22 @@ const STAR_PATH = 'M0 -1 Q0.14 -0.14 1 0 Q0.14 0.14 0 1 Q-0.14 0.14 -1 0 Q-0.14 
       </mask>
     </defs>
     <rect x="-6000" y="-6000" width="13000" height="13000" fill="#0c1626" mask="url(#field-constellation)"></rect>
+    <!-- Estrellas: llevan la misma máscara, así desaparecen donde se abre la constelación. -->
+    <g mask="url(#field-constellation)">
+      {
+        SKY_DOTS.map((dot) => (
+          <circle
+            cx={dot.x}
+            cy={dot.y}
+            r={dot.radius}
+            fill={dot.gold ? '#e8a917' : '#faf6ec'}
+            fill-opacity={dot.opacity}
+            class={dot.twinkles ? 'constellation-star' : undefined}
+            style={dot.twinkles ? `--delay: ${dot.delay}s` : undefined}
+          />
+        ))
+      }
+    </g>
   </svg>
 
   <div class="container-content text-center" data-field-copy>
