@@ -236,6 +236,53 @@ function animateConstellations(): void {
   });
 }
 
+function animateField(): void {
+  // El campo se ve a través de la constelación de Orión (estrellas de 4 puntas y líneas),
+  // que crece hasta descubrir la foto entera. La sección queda fija mientras tanto.
+  const section = document.querySelector<HTMLElement>('[data-field]');
+  const media = section?.querySelector<HTMLElement>('[data-field-media]');
+  const image = media?.querySelector('img');
+  const copy = section?.querySelector<HTMLElement>('[data-field-copy]');
+  const cover = section?.querySelector<SVGElement>('[data-field-cover]');
+  const lines = cover?.querySelector<SVGElement>('[data-field-lines]');
+  const stars = cover ? Array.from(cover.querySelectorAll<SVGElement>('[data-field-star]')) : [];
+  if (!section || !media || !image || !copy || !cover || !lines) return;
+
+  // Ventanas de la cubierta: escala de las estrellas y grosor de las líneas.
+  const WINDOW = { START_SCALE: 1, END_SCALE: 95, START_STROKE: 5, END_STROKE: 1100 } as const;
+  const state: { scale: number; stroke: number } = { scale: WINDOW.START_SCALE, stroke: WINDOW.START_STROKE };
+  const applyWindow = (): void => {
+    stars.forEach((star) => star.setAttribute('transform', `scale(${state.scale})`));
+    lines.setAttribute('stroke-width', String(state.stroke));
+  };
+
+  gsap.set(cover, { autoAlpha: 1 });
+
+  gsap
+    .timeline({
+      defaults: { ease: 'none' },
+      scrollTrigger: { trigger: section, start: 'top top', end: '+=160%', pin: true, scrub: 0.6 },
+    })
+    .fromTo(
+      state,
+      { scale: WINDOW.START_SCALE, stroke: WINDOW.START_STROKE },
+      { scale: WINDOW.END_SCALE, stroke: WINDOW.END_STROKE, duration: 0.9, ease: 'power3.in', onUpdate: applyWindow },
+      0,
+    )
+    // Red de seguridad: la cubierta se desvanece al final por si queda algún resquicio.
+    .to(cover, { autoAlpha: 0, duration: 0.1 }, 0.9)
+    // El zoom parte centrado en las flores, para que las ventanas muestren girasoles y no cielo.
+    .fromTo(image, { scale: 1.7, transformOrigin: '50% 80%' }, { scale: 1, transformOrigin: '50% 80%', duration: 1 }, 0)
+    // El velo oscuro entra recién cuando aparece el texto.
+    .fromTo(media.querySelectorAll('[data-field-veil]'), { autoAlpha: 0 }, { autoAlpha: 1, duration: 0.3 }, 0.62)
+    .fromTo(
+      copy.children,
+      { autoAlpha: 0, y: 60 },
+      { autoAlpha: 1, y: 0, duration: 0.3, stagger: 0.08, ease: 'power2.out' },
+      0.7,
+    );
+}
+
 function animateBrand(): void {
   // Giro muy lento del girasol en la marca de agua.
   gsap.to('[data-spin] [data-isotipo]', {
@@ -253,6 +300,7 @@ if (!prefersReducedMotion) {
   gsap.registerPlugin(ScrollTrigger, SplitText);
 
   animateHero();
+  animateField();
   animateHeadings();
   animateReveals();
   animateMedia();

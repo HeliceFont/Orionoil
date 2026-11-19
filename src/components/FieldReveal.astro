@@ -1,0 +1,122 @@
+---
+// Interludio a pantalla completa: el campo de girasoles se ve a través de la constelación de Orión
+// (estrellas de 4 puntas y líneas), que crece con el scroll hasta descubrir la foto entera.
+// Sin JS o con movimiento reducido se ve el estado final: la foto completa con el texto encima.
+import { Picture } from 'astro:assets';
+import fieldImage from '../assets/images/campo-girasoles.webp';
+
+// Mismas coordenadas que el isotipo y que Constellation.astro.
+const POINTS = {
+  hombroIzq: [350, 345],
+  cabeza: [475, 292],
+  hombroDer: [545, 365],
+  cinturaDer: [497, 505],
+  cinturaMedio: [461, 527],
+  cinturaIzq: [425, 548],
+  pieIzq: [345, 752],
+  pieDer: [632, 712],
+  brazoIzq: [245, 235],
+  manoIzq: [300, 150],
+  brazoDer: [762, 330],
+  codoDer: [742, 462],
+  manoDer: [712, 268],
+} as const;
+
+type PointName = keyof typeof POINTS;
+
+const LINES: readonly (readonly [PointName, PointName])[] = [
+  ['manoIzq', 'brazoIzq'],
+  ['brazoIzq', 'hombroIzq'],
+  ['hombroIzq', 'cabeza'],
+  ['cabeza', 'hombroDer'],
+  ['hombroIzq', 'cinturaIzq'],
+  ['hombroDer', 'cinturaDer'],
+  ['cinturaIzq', 'cinturaDer'],
+  ['cinturaIzq', 'pieIzq'],
+  ['cinturaDer', 'pieDer'],
+  ['hombroDer', 'brazoDer'],
+  ['brazoDer', 'manoDer'],
+  ['brazoDer', 'codoDer'],
+];
+
+// Tamaño inicial de cada estrella-ventana.
+const STARS: readonly (readonly [PointName, number])[] = [
+  ['hombroIzq', 50],
+  ['hombroDer', 46],
+  ['cabeza', 32],
+  ['cinturaIzq', 40],
+  ['cinturaMedio', 40],
+  ['cinturaDer', 40],
+  ['pieIzq', 46],
+  ['pieDer', 54],
+  ['brazoIzq', 32],
+  ['manoIzq', 26],
+  ['brazoDer', 34],
+  ['codoDer', 26],
+  ['manoDer', 26],
+];
+
+const STAR_PATH = 'M0 -1 Q0.14 -0.14 1 0 Q0.14 0.14 0 1 Q-0.14 0.14 -1 0 Q-0.14 -0.14 0 -1 Z';
+---
+
+<section
+  aria-label="Nuestra especialidad"
+  class="on-dark relative isolate flex h-[100svh] min-h-[34rem] items-center justify-center overflow-hidden bg-marfil"
+  data-field
+>
+  <div class="absolute inset-0 -z-10 overflow-hidden" data-field-media>
+    <Picture
+      src={fieldImage}
+      formats={['avif', 'webp']}
+      widths={[640, 960, 1280, 1920, 2000]}
+      sizes="100vw"
+      alt="Campo de girasoles en flor bajo un cielo despejado"
+      loading="lazy"
+      class="h-full w-full object-cover object-[50%_62%]"
+      pictureAttributes={{ class: 'block h-full w-full' }}
+    />
+    <!-- Velo para el contraste del texto -->
+    <div class="absolute inset-0 bg-noche-profundo/50" aria-hidden="true" data-field-veil></div>
+    <div class="absolute inset-0 bg-radial from-noche-profundo/45 to-transparent to-70%" aria-hidden="true" data-field-veil></div>
+  </div>
+
+  <!-- Cubierta marfil con la constelación calada. Oculta por defecto: la activa el script. -->
+  <svg
+    viewBox="53 1 900 900"
+    preserveAspectRatio="xMidYMid meet"
+    class="invisible absolute inset-0 -z-10 h-full w-full overflow-visible"
+    aria-hidden="true"
+    focusable="false"
+    data-field-cover
+  >
+    <defs>
+      <mask id="field-constellation" maskUnits="userSpaceOnUse" x="-6000" y="-6000" width="13000" height="13000">
+        <rect x="-6000" y="-6000" width="13000" height="13000" fill="#fff"></rect>
+        <g fill="none" stroke="#000" stroke-width="5" stroke-linecap="round" data-field-lines>
+          {LINES.map(([from, to]) => <path d={`M${POINTS[from][0]} ${POINTS[from][1]} L${POINTS[to][0]} ${POINTS[to][1]}`} />)}
+        </g>
+        {
+          STARS.map(([point, size]) => (
+            <g transform={`translate(${POINTS[point][0]} ${POINTS[point][1]})`}>
+              <g data-field-star>
+                <path d={STAR_PATH} transform={`scale(${size})`} fill="#000" />
+              </g>
+            </g>
+          ))
+        }
+      </mask>
+    </defs>
+    <rect x="-6000" y="-6000" width="13000" height="13000" fill="#faf6ec" mask="url(#field-constellation)"></rect>
+  </svg>
+
+  <div class="container-content text-center" data-field-copy>
+    <p class="eyebrow flex items-center justify-center gap-4 text-oro">
+      <span class="rule" aria-hidden="true"></span>
+      Nuestra única especialidad
+      <span class="rule" aria-hidden="true"></span>
+    </p>
+    <p class="display-hero mx-auto mt-7 max-w-[60rem] font-display text-marfil">
+      Un solo producto: <em class="accent">girasol</em>
+    </p>
+  </div>
+</section>
