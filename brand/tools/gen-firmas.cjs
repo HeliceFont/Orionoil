@@ -214,5 +214,9 @@ ${cards}
   }
   fs.mkdirSync(path.dirname(outFile), { recursive: true });
   fs.writeFileSync(outFile, pageHtml());
+  // Solo el código de la firma, para pegar en el editor «Código fuente» del correo.
+  const snippetFile = path.join(path.dirname(outFile), 'firma-orion-codigo.html');
+  fs.writeFileSync(snippetFile, `${signatureHtml(SIGNATURES[0])}
+`);
   console.log('OK', outFile, 'imagenes desde', BASE);
 })();
